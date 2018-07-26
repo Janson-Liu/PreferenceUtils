@@ -1,7 +1,7 @@
 package com.perculacreative.preferenceutils.library
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
+import androidx.lifecycle.MutableLiveData
 
 /**
  * Based on https://gist.github.com/rharter/1df1cd72ce4e9d1801bd2d49f2a96810

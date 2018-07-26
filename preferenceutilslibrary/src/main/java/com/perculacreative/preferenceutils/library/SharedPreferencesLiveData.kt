@@ -22,9 +22,13 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
     abstract fun getValueFromPreferences(key: String, defValue: T): T
     protected abstract fun setValueInPreferences(value: T)
 
-    override fun setValue(value: T) {
+    override fun setValue(value: T?) {
         super.setValue(value)
-        setValueInPreferences(value)
+        if (value != null) {
+            setValueInPreferences(value)
+        } else {
+            sharedPrefs.edit().remove(key).apply()
+        }
     }
 
     override fun onActive() {

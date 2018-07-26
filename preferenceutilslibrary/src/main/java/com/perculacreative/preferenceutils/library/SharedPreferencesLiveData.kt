@@ -15,7 +15,7 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
 
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (key == this.key) {
-            postValue(getValueFromPreferences(key, defValue))
+            super.setValue(getValueFromPreferences(key, defValue))
         }
     }
 
@@ -31,9 +31,19 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
         }
     }
 
+    override fun getValue(): T? {
+        return if (hasActiveObservers()) {
+            super.getValue()
+        } else {
+            // If there are no observers, the LiveData value will not have been updated. Thus, we need
+            // to get the latest value from SharedPreferences.
+            getValueFromPreferences(key, defValue)
+        }
+    }
+
     override fun onActive() {
         super.onActive()
-        postValue(getValueFromPreferences(key, defValue))
+        super.setValue(getValueFromPreferences(key, defValue))
         sharedPrefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
 

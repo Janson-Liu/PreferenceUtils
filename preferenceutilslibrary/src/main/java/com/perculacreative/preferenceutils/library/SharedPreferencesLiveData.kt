@@ -1,6 +1,6 @@
 package com.perculacreative.preferenceutils.library
 
-import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 
 /**
@@ -11,7 +11,7 @@ import android.content.SharedPreferences
  */
 abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
                                            val key: String,
-                                           val defValue: T) : LiveData<T>() {
+                                           val defValue: T) : MutableLiveData<T>() {
 
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (key == this.key) {
@@ -20,7 +20,7 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
     }
 
     abstract fun getValueFromPreferences(key: String, defValue: T): T
-    abstract fun setValueInPreferences(value: T)
+    protected abstract fun setValueInPreferences(value: T)
 
     override fun setValue(value: T) {
         super.setValue(value)

@@ -4,23 +4,25 @@ import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 
 /**
+ * LiveData that notifies observers when the SharedPreference changes, and updates the
+ * SharedPreference with [setValue].
  * Based on https://gist.github.com/rharter/1df1cd72ce4e9d1801bd2d49f2a96810
  * @param sharedPrefs [SharedPreferences] to use
  * @param key Key for the shared preference
- * @param defValue Default value, if no preference exists
+ * @param defaultValue Default value, if no preference exists
  */
 abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
                                            val key: String,
-                                           val defValue: T) : MutableLiveData<T>() {
+                                           val defaultValue: T) : MutableLiveData<T>() {
 
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (key == this.key) {
-            super.setValue(getValueFromPreferences(key, defValue))
+            super.setValue(getValueFromPreferences(key, defaultValue))
         }
     }
 
-    abstract fun getValueFromPreferences(key: String, defValue: T): T
-    protected abstract fun setValueInPreferences(value: T)
+    internal abstract fun getValueFromPreferences(key: String, defValue: T): T
+    internal abstract fun setValueInPreferences(value: T)
 
     override fun setValue(value: T?) {
         super.setValue(value)
@@ -37,13 +39,13 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
         } else {
             // If there are no observers, the LiveData value will not have been updated. Thus, we need
             // to get the latest value from SharedPreferences.
-            getValueFromPreferences(key, defValue)
+            getValueFromPreferences(key, defaultValue)
         }
     }
 
     override fun onActive() {
         super.onActive()
-        super.setValue(getValueFromPreferences(key, defValue))
+        super.setValue(getValueFromPreferences(key, defaultValue))
         sharedPrefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
 

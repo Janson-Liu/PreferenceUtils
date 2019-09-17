@@ -17,7 +17,7 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
 
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (key == this.key) {
-            super.setValue(getValueFromPreferences(key, defaultValue))
+            getValueFromPreferences(key, defaultValue)?.takeIf { it != value }?.let { super.setValue(it) }
         }
     }
 

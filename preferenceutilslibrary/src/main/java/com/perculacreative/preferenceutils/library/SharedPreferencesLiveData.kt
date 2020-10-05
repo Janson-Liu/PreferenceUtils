@@ -74,9 +74,9 @@ class SharedPreferenceIntLiveData(sharedPrefs: SharedPreferences, key: String, d
 }
 
 class SharedPreferenceStringLiveData(sharedPrefs: SharedPreferences, key: String, defValue: String) :
-        SharedPreferenceLiveData<String>(sharedPrefs, key, defValue) {
-    override fun getValueFromPreferences(key: String, defValue: String): String = sharedPrefs.getString(key, defValue) ?: defValue
-    override fun setValueInPreferences(value: String) {
+        SharedPreferenceLiveData<String?>(sharedPrefs, key, defValue) {
+    override fun getValueFromPreferences(key: String, defValue: String?): String? = sharedPrefs.getString(key, defValue)
+    override fun setValueInPreferences(value: String?) {
         sharedPrefs.edit().putString(key, value).apply()
     }
 }
@@ -106,9 +106,9 @@ class SharedPreferenceLongLiveData(sharedPrefs: SharedPreferences, key: String, 
 }
 
 class SharedPreferenceStringSetLiveData(sharedPrefs: SharedPreferences, key: String, defValue: Set<String>) :
-        SharedPreferenceLiveData<Set<String>>(sharedPrefs, key, defValue) {
-    override fun getValueFromPreferences(key: String, defValue: Set<String>): Set<String> = sharedPrefs.getStringSet(key, defValue) ?: defValue
-    override fun setValueInPreferences(value: Set<String>) {
+        SharedPreferenceLiveData<Set<String>?>(sharedPrefs, key, defValue) {
+    override fun getValueFromPreferences(key: String, defValue: Set<String>?): Set<String>? = sharedPrefs.getStringSet(key, defValue)
+    override fun setValueInPreferences(value: Set<String>?) {
         sharedPrefs.edit().putStringSet(key, value).apply()
     }
 }
@@ -116,7 +116,7 @@ class SharedPreferenceStringSetLiveData(sharedPrefs: SharedPreferences, key: Str
 fun SharedPreferences.intLiveData(key: String, defValue: Int): SharedPreferenceLiveData<Int> {
     return SharedPreferenceIntLiveData(this, key, defValue)
 }
-fun SharedPreferences.stringLiveData(key: String, defValue: String): SharedPreferenceLiveData<String> {
+fun SharedPreferences.stringLiveData(key: String, defValue: String): SharedPreferenceLiveData<String?> {
     return SharedPreferenceStringLiveData(this, key, defValue)
 }
 fun SharedPreferences.booleanLiveData(key: String, defValue: Boolean): SharedPreferenceLiveData<Boolean> {
@@ -128,6 +128,6 @@ fun SharedPreferences.floatLiveData(key: String, defValue: Float): SharedPrefere
 fun SharedPreferences.longLiveData(key: String, defValue: Long): SharedPreferenceLiveData<Long> {
     return SharedPreferenceLongLiveData(this, key, defValue)
 }
-fun SharedPreferences.stringSetLiveData(key: String, defValue: Set<String>): SharedPreferenceLiveData<Set<String>> {
+fun SharedPreferences.stringSetLiveData(key: String, defValue: Set<String>): SharedPreferenceLiveData<Set<String>?> {
     return SharedPreferenceStringSetLiveData(this, key, defValue)
 }
